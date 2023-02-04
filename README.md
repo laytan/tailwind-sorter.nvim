@@ -1,0 +1,1 @@
+# Tailwind Sorter for Neovim

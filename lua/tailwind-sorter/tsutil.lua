@@ -46,7 +46,13 @@ end
 --- @param match TWMatch
 --- @param text string
 M.put_new_node_text = function(match, text)
+  local original = M.get_match_text(match)
   text = M.replace_match_text(match, text)
+
+  if original == text then
+    return
+  end
+
   local lines = util.split_lines(text)
   local srow, scol, erow, ecol = match.node:range()
 

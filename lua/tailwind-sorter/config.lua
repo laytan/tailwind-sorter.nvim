@@ -1,8 +1,12 @@
 local util = require('tailwind-sorter.util')
 
 --- @class TWConfig
-local M =
-  { config = { on_save_enabled = false, on_save_pattern = { '*.html' } } }
+local M = {
+  config = {
+    on_save_enabled = false,
+    on_save_pattern = { '*.html', '*.js', '*.jsx', '*.tsx', '*.twig', '*.hbs' },
+  },
+}
 
 function M:get()
   return self.config

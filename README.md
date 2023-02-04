@@ -9,7 +9,13 @@ that extends/injects html or jsx.
 
 ## Features
 
-- Works in more file types than prettier does (using a treesitter integration)
+- Works in more file types than prettier does (using a treesitter integration),
+  confirmed to work with:
+  - jsx
+  - tsx
+  - html
+  - twig
+  - handlebars
 - Not having to pull in prettier just to have your classes sorted
 - Easier/faster than prettier
 
@@ -27,7 +33,7 @@ The following is the **default** configuration:
 ```lua
 require('tailwind-sorter').setup({
   on_save_enabled = false, -- If `true`, automatically enables on save sorting.
-  on_save_pattern = { '*.html' }, -- The file patterns to watch and sort.
+  on_save_pattern = { '*.html', '*.js', '*.jsx', '*.tsx', '*.twig', '*.hbs' }, -- The file patterns to watch and sort.
 })
 ```
 
@@ -86,9 +92,9 @@ I strongly recommend reading `:h treesitter-query` before doing this.
 directory and sorts any `@tailwind` captures. Make sure to add them to the
 `on_save_pattern` config if you use the on save sort feature.
 
-Here is how you would add support for `.jsx` files (if it was not added already:
+Here is how you would add support for jsx syntax (if it was not added already):
 
-1. Create the file `queries/jsx/tailwind.scm`
+1. Create the file `queries/javascript/tailwind.scm`
 2. We will paste the following to target any string inside the className
    attribute:
 

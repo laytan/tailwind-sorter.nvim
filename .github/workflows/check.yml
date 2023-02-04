@@ -27,13 +27,22 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Cache LuaFormat
+        id: cache-lua-format
+        uses: actions/cache@v3
+        with:
+          path: /usr/local/bin/lua-format
+          key: ${{ runner.os }}-lua-format
+
       - name: Install LuaRocks
+        if: ${{ steps.cache-lua-format.outputs.cache-hit != 'true' }}
         run: |
           sudo apt-get update
           sudo add-apt-repository universe
           sudo apt install luarocks -y
 
       - name: Install LuaFormat
+        if: ${{ steps.cache-lua-format.outputs.cache-hit != 'true' }}
         run: sudo luarocks install --server=https://luarocks.org/dev luaformatter
 
       - name: Check with LuaFormat

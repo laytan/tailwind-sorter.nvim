@@ -1,7 +1,7 @@
-local queries = require('nvim-treesitter.query')
 local Job = require('plenary.job')
-local util = require('tailwind-sorter.util')
 local config = require('tailwind-sorter.config')
+local util = require('tailwind-sorter.util')
+local tsutil = require('tailwind-sorter.tsutil')
 
 local M = {}
 
@@ -39,21 +39,15 @@ end
 M.sort = function(buf)
   buf = buf or vim.api.nvim_get_current_buf()
 
-  local matches = queries.get_capture_matches_recursively(
-    buf, '@tailwind', 'tailwind'
-  )
+  local matches = tsutil.get_query_matches(buf)
 
-  local nodes = {}
   local texts = {}
   for _, match in ipairs(matches) do
-    local node = match['node']
-    local text = vim.treesitter.query.get_node_text(node, 0)
-
-    table.insert(nodes, node)
+    local text = tsutil.get_match_text(match)
     table.insert(texts, text)
   end
 
-  if #nodes == 0 then
+  if #texts == 0 then
     return
   end
 
@@ -74,7 +68,7 @@ M.sort = function(buf)
 
   -- Iterate the replacements in reverse and set them in the buffer.
   for i = #out, 1, -1 do
-    util.replace_node_text(buf, nodes[i], out[i])
+    tsutil.put_new_node_text(matches[i], out[i])
   end
 end
 
@@ -95,10 +89,10 @@ M.toggle_on_save = function(extra_cfg)
   else
     vim.api.nvim_create_autocmd(
       'BufWritePre', {
-        pattern = cfg:get().on_save_pattern,
-        group = M.augroup,
-        command = 'TailwindSort',
-      }
+      pattern = cfg:get().on_save_pattern,
+      group = M.augroup,
+      command = 'TailwindSort',
+    }
     )
 
     M.on_save_enabled = true

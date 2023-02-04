@@ -17,18 +17,6 @@ M.split_lines = function(text)
   return lines
 end
 
---- @param buf integer
---- @param node userdata
---- @param text string|table
-M.replace_node_text = function(buf, node, text)
-  if type(text) == 'string' then
-    text = M.split_lines(text)
-  end
-
-  local srow, scol, erow, ecol = node:range()
-  vim.api.nvim_buf_set_text(buf, srow, scol, erow, ecol, text)
-end
-
 --- @param obj table
 --- @param seen nil|table
 M.deep_copy = function(obj, seen)

@@ -1,0 +1,49 @@
+name: Linting and format checking
+
+on: [push, pull_request]
+
+jobs:
+
+  deno:
+    name: Deno
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Deno
+        run: |
+          curl -fsSL https://deno.land/x/install/install.sh | sh
+          sudo ln -s /home/runner/.deno/bin/deno /usr/local/bin
+
+      - name: Formating
+        run: deno fmt --check
+
+      - name: Typing
+        run: deno check formatter/src/index.ts
+
+  lua:
+    name: Lua
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install LuaRocks
+        run: |
+          sudo apt-get update
+          sudo add-apt-repository universe
+          sudo apt install luarocks -y
+
+      - name: Install LuaFormat
+        run: sudo luarocks install --server=https://luarocks.org/dev luaformatter
+
+      - name: Check with LuaFormat
+        run: lua-format ./**/*.lua --check
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+
+      - name: Install Selene
+        run: cargo install selene
+
+      - name: Check with Selene
+        run: selene ./**/*.lua

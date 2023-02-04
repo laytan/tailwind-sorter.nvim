@@ -22,36 +22,55 @@ jobs:
         run: deno check formatter/src/index.ts
 
   lua:
-    name: Lua
+    name: LuaFormat
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
+      - name: Get Month
+        id: get-month
+        run: echo "month=$(/bin/date -u "+%Y%m")" >> $GITHUB_OUTPUT
 
       - name: Cache LuaFormat
         id: cache-lua-format
         uses: actions/cache@v3
         with:
           path: /usr/local/bin/lua-format
-          key: ${{ runner.os }}-lua-format
+          key: ${{ runner.os }}-${{ steps.get-month.outputs.month }}-lua-format
 
       - name: Install LuaRocks
-        if: ${{ steps.cache-lua-format.outputs.cache-hit != 'true' }}
+        if: steps.cache-lua-format.outputs.cache-hit != 'true'
         run: |
           sudo apt-get update
           sudo add-apt-repository universe
           sudo apt install luarocks -y
 
       - name: Install LuaFormat
-        if: ${{ steps.cache-lua-format.outputs.cache-hit != 'true' }}
+        if: steps.cache-lua-format.outputs.cache-hit != 'true'
         run: sudo luarocks install --server=https://luarocks.org/dev luaformatter
 
       - name: Check with LuaFormat
         run: lua-format ./**/*.lua --check
 
-      - name: Install Rust
-        uses: actions-rs/toolchain@v1
+  selene:
+    runs-on: ubuntu-latest
+    name: Selene
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Get Month
+        id: get-month
+        run: echo "month=$(/bin/date -u "+%Y%m")" >> $GITHUB_OUTPUT
+
+      - name: Cache Selene
+        id: cache-selene
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/.cargo/bin/selene
+          key: ${{ runner.os }}-${{ steps.get-month.outputs.month }}-selene
 
       - name: Install Selene
+        if: steps.cache-selene.outputs.cache-hit != 'true'
         run: cargo install selene
 
       - name: Check with Selene

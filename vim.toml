@@ -25,6 +25,9 @@ any = true
 [assert.has_error]
 any = true
 
+[assert.Not]
+any = true
+
 [[assert.equals.args]]
 type = "any"
 [[assert.equals.args]]

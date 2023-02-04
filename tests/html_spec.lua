@@ -1,4 +1,5 @@
-local tailwind_sorter = require('tailwind-sorter')
+local common = require('tests.common')
+local tailwind_sorter = require('tailwind-sorter').setup()
 
 describe(
   'test html', function()
@@ -14,36 +15,9 @@ describe(
 
           vim.cmd(string.format('edit %s', file))
 
-          local received = {}
-          local description = ''
-          local expected = {}
+          tailwind_sorter.sort()
 
-          local co = coroutine.running()
-          tailwind_sorter.sort(
-            0, function()
-              local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-
-              for i = 1, math.floor(#lines / 2) - 1 do
-                table.insert(received, lines[i])
-              end
-
-              description = lines[math.ceil(#lines / 2)]:sub(6)
-
-              for i = math.ceil(#lines / 2) + 1, #lines - 1 do
-                table.insert(expected, lines[i])
-              end
-
-              coroutine.resume(co)
-            end
-          )
-          coroutine.yield()
-
-          assert.same(
-            expected, received, string.format(
-              'File "%s" "%s": received and expected not the same', file,
-              description
-            )
-          )
+          common.check_sort(file)
         end
       )
     end

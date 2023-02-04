@@ -3,6 +3,10 @@
 Sorts your tailwind classes, just like
 [prettier-plugin-tailwindcss](https://github.com/tailwindlabs/prettier-plugin-tailwindcss).
 
+The plugin currently works in the treesitter parsers `html_tags` and `jsx`, and
+is very easy to extend (see below). This means it should work in any language
+that extends/injects html or jsx.
+
 ## Features
 
 - Works in more file types than prettier does (using a treesitter integration)
@@ -11,20 +15,60 @@ Sorts your tailwind classes, just like
 
 ## Usage
 
-Once installed you can either use the `:TailwindSort` command or call it from
-anywhere else:
+### Commands
+
+- `:TailwindSort` sorts classes in the current buffer
+- `:TailwindSortOnSaveToggle` toggles automatic sorting on save
+
+### Configuration
+
+The following is the **default** configuration:
 
 ```lua
--- Using a keymap.
-vim.api.nvim_set_keymap('n', '<leader>ts', ':TailwindSort')
-
--- Using an auto command (format before saving).
-local group = vim.api.nvim_create_augroup('tailwind-sorter', {})
-vim.api.nvim_create_autocmd('BufWritePre', {
-  pattern = {'*.html', '*.jsx' }, -- expand with other file types.
-  command = 'TailwindSort',
-  group = group,
+require('tailwind-sorter').setup({
+  on_save_enabled = false, -- If `true`, automatically enables on save sorting.
+  on_save_pattern = { '*.html' }, -- The file patterns to watch and sort.
 })
+```
+
+#### lazy.nvim
+
+```lua
+require('lazy').setup({
+  {
+    'laytan/tailwind-sorter.nvim',
+    dependencies = {'nvim-treesitter/nvim-treesitter', 'nvim-lua/plenary.nvim'},
+    config = {},
+  },
+})
+```
+
+#### packer.nvim
+
+```lua
+require('packer').startup(function(use)
+  use {
+    'laytan/tailwind-sorter.nvim',
+    requires = {'nvim-treesitter/nvim-treesitter', 'nvim-lua/plenary.nvim'},
+    config = function() require('tailwind-sorter').setup() end,
+  }
+end)
+```
+
+#### vim-plug
+
+```vim
+call plug#begin()
+
+Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'laytan/tailwind-sorter.nvim'
+
+call plug#end()
+
+lua <<EOF
+  require('tailwind-sorter').setup()
+EOF
 ```
 
 ### Requirements
@@ -34,22 +78,34 @@ vim.api.nvim_create_autocmd('BufWritePre', {
 - [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
 - [plenary](https://github.com/nvim-lua/plenary.nvim)
 
-### Installation
+### Extending
 
-Any plugin manager will be able to install it but here is an example using
-[lazy.nvim](https://github.com/folke/lazy.nvim):
+I strongly recommend reading `:h treesitter-query` before doing this.
+
+**TLDR**: tailwind-sorter.nvim looks for `tailwind.scm` files in your `queries`
+directory and sorts any `@tailwind` captures. Make sure to add them to the
+`on_save_pattern` config if you use the on save sort feature.
+
+Here is how you would add support for `.jsx` files (if it was not added already:
+
+1. Create the file `queries/jsx/tailwind.scm`
+2. We will paste the following to target any string inside the className
+   attribute:
+
+```query
+(jsx_attribute
+  (property_identifier) @_name
+    (#eq? @_name "className")
+  (string
+    (string_fragment) @tailwind))
+```
+
+3. Add any file extension for jsx in the `on_save_pattern` config:
 
 ```lua
-require('lazy').setup({
-  {
-    'laytan/tailwind-sorter.nvim',
-    dependencies = {'nvim-treesitter/nvim-treesitter', 'nvim-lua/plenary.nvim'},
-    config = {},
-    cmd = 'TailwindSort', -- Optional lazy loading.
-  },
+require('tailwind-sorter').setup({
+  on_save_pattern = { '*.html', '*.jsx', '*.tsx' },
 })
 ```
 
-### Configuring and Extending
-
-Coming soon
+_Please consider PR'ing this extension back to the plugin._

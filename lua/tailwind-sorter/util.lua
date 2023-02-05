@@ -2,7 +2,7 @@ local M = {}
 
 --- @return string
 M.plugin_path = function()
-  return debug.getinfo(1).source:sub(2, -10) .. '/../..'
+  return vim.loop.fs_realpath(debug.getinfo(1).source:sub(2, -10) .. '/../..')
 end
 
 --- @param text string

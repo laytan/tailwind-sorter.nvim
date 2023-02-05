@@ -36,7 +36,13 @@ M.setup = function(cfg)
 end
 
 --- @param buf nil|integer
-M.sort = function(buf)
+--- @param extra_cfg nil|TWPartialConfig
+M.sort = function(buf, extra_cfg)
+  local cfg = M.config
+  if extra_cfg then
+    cfg = cfg:with(extra_cfg)
+  end
+
   buf = buf or vim.api.nvim_get_current_buf()
 
   local matches = tsutil.get_query_matches(buf)
@@ -51,18 +57,50 @@ M.sort = function(buf)
     return
   end
 
-  local result = Job:new(
+  local plugin_path = util.plugin_path()
+  local deno_path = cfg:get_deno_path()
+  if not deno_path then
+    vim.notify(
+      '[tailwind-sorter.nvim]: `deno` is required to be installed and pointed to through the `deno_path` config key, please do this and try again.'
+      ,
+      vim.log.levels.ERROR
+    )
+    return
+  end
+
+  local job = Job:new(
     {
-      command = 'deno',
+      command = deno_path,
       args = {
         'run',
         '--allow-env',
+        -- Tailwind reads and walks a bunch of files to retrieve your config.
         '--allow-read',
-        util.plugin_path() .. '/formatter/src/index.ts',
+        -- Tailwind uses the uid (username) to retrieve configuration.
+        '--allow-sys=uid',
+        plugin_path .. '/formatter/src/index.ts',
         vim.json.encode(texts),
       },
     }
-  ):sync()
+  )
+
+  local result = job:sync()
+  local error = job:stderr_result()
+
+  if #error > 0 then
+    vim.notify(
+      '[tailwind-sorter.nvim]: Error during class sorting: ' ..
+      table.concat(error, ', ') .. '.', vim.log.levels.ERROR
+    )
+    return
+  end
+
+  if #result ~= 1 then
+    vim.notify(
+      '[tailwind-sorter.nvim]: Unfortunately, no output has been received from the class sorting process.',
+      vim.log.levels.ERROR
+    )
+  end
 
   local out = vim.json.decode(result[1])
 
@@ -73,11 +111,14 @@ M.sort = function(buf)
 end
 
 M.toggle_on_save = function(extra_cfg)
-  local cfg = M.config:with(extra_cfg)
+  local cfg = M.config
+  if extra_cfg then
+    cfg = cfg:with(extra_cfg)
+  end
 
   if M.augroup == nil then
     vim.notify(
-      'The plugin is not setup yet, please call .setup() first.',
+      '[tailwind-sorter.nvim]: The plugin is not setup yet, please call .setup() first.',
       vim.log.levels.ERROR
     )
   end

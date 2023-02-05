@@ -1,13 +1,16 @@
 import setupContextUtils from "npm:tailwindcss/lib/lib/setupContextUtils.js";
 import resolveConfig from "npm:tailwindcss/resolveConfig.js";
 import resolveConfigPathUtil from "npm:tailwindcss/lib/util/resolveConfigPath.js";
+import { createRequire } from "https://deno.land/std/node/module.ts";
 
 const { createContext } = setupContextUtils;
 const { default: resolveConfigPath } = resolveConfigPathUtil;
 
 const configPath = resolveConfigPath();
+
+const require = createRequire(import.meta.url);
 const config = configPath
-  ? await import(configPath, { assert: { type: "json" } })
+  ? await require(configPath)
   : {};
 const ctx = createContext(resolveConfig(config));
 

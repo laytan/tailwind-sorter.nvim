@@ -73,6 +73,8 @@ M.sort = function(buf, extra_cfg)
       command = deno_path,
       args = {
         'run',
+        '--no-config',
+        '--quiet',
         '--allow-env',
         -- Tailwind reads and walks a bunch of files to retrieve your config.
         '--allow-read',

@@ -3,23 +3,21 @@ name: Linting and format checking
 on: [push, pull_request]
 
 jobs:
-
-  deno:
-    name: Deno
+  tsc:
+    name: Typescript
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install Deno
-        run: |
-          curl -fsSL https://deno.land/x/install/install.sh | sh
-          sudo ln -s /home/runner/.deno/bin/deno /usr/local/bin
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
 
-      - name: Formating
-        run: deno fmt --check
+      - name: Install NPM dependencies
+        run: cd formatter && npm i
 
-      - name: Typing
-        run: deno check formatter/src/index.ts
+      - name: Run TSC
+        run: cd formatter && npm run check
 
   lua:
     name: LuaFormat

@@ -22,13 +22,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install Deno
-        run: |
-          curl -fsSL https://deno.land/x/install/install.sh | sh
-          sudo ln -s /home/runner/.deno/bin/deno /usr/local/bin
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
 
-      - name: Cache Deno formatter dependencies
-        run: deno cache formatter/src/index.ts
+      - name: Install NPM dependencies
+        run: cd formatter && npm i
+
+      - name: Build the formatter
+        run: cd formatter && npm run build
 
       - name: Install and prepare Neovim
         run: |

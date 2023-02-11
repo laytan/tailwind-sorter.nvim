@@ -29,8 +29,7 @@ any language and is easy to extend to new file types.
 
 ### Requirements
 
-- [deno](https://deno.land/manual@v1.30.2/getting_started/installation) (The
-  deno requirement is temporary and will be dropped, see #1)
+- NodeJS, tested with v16
 - [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
 - [plenary](https://github.com/nvim-lua/plenary.nvim)
 
@@ -42,7 +41,7 @@ The following is the **default** configuration:
 require('tailwind-sorter').setup({
   on_save_enabled = false, -- If `true`, automatically enables on save sorting.
   on_save_pattern = { '*.html', '*.js', '*.jsx', '*.tsx', '*.twig', '*.hbs', '*.php' }, -- The file patterns to watch and sort.
-  deno_path = 'deno',
+  node_path = 'node',
 })
 ```
 
@@ -53,6 +52,7 @@ require('lazy').setup({
   {
     'laytan/tailwind-sorter.nvim',
     dependencies = {'nvim-treesitter/nvim-treesitter', 'nvim-lua/plenary.nvim'},
+    build = 'cd formatter && npm run build',
     config = {},
   },
 })
@@ -66,6 +66,7 @@ require('packer').startup(function(use)
     'laytan/tailwind-sorter.nvim',
     requires = {'nvim-treesitter/nvim-treesitter', 'nvim-lua/plenary.nvim'},
     config = function() require('tailwind-sorter').setup() end,
+    run = 'cd formatter && npm run build',
   }
 end)
 ```
@@ -77,7 +78,7 @@ call plug#begin()
 
 Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'nvim-lua/plenary.nvim'
-Plug 'laytan/tailwind-sorter.nvim'
+Plug 'laytan/tailwind-sorter.nvim', { 'do': 'cd formatter && npm run build' }
 
 call plug#end()
 

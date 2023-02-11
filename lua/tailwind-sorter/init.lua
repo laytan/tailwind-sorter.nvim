@@ -10,14 +10,10 @@ local M = {}
 M.augroup = nil
 M.config = config:with()
 M.on_save_enabled = false
---- @type nil|Job
-M.cache_job = nil
 
 --- @param cfg TWPartialConfig
 M.setup = function(cfg)
   M.config:apply(cfg)
-
-  M._deno_cache()
 
   M.augroup = vim.api.nvim_create_augroup('tailwind-sorter', {})
 
@@ -48,14 +44,6 @@ M.sort = function(buf, extra_cfg)
     cfg = cfg:with(extra_cfg)
   end
 
-  if M.cache_job then
-    vim.notify('[tailwind-sorter.nvim]: Initial setup is still being done, you will be notified once the plugin is ready.')
-    M.cache_job:add_on_exit_callback(function()
-      vim.notify('[tailwind-sorter.nvim]: Initial setup finished, you are now ready to sort classes.')
-    end)
-    return
-  end
-
   buf = buf or vim.api.nvim_get_current_buf()
 
   local matches = tsutil.get_query_matches(buf)
@@ -76,29 +64,20 @@ M.sort = function(buf, extra_cfg)
   end
 
   local plugin_path = util.plugin_path()
-  local deno_path = cfg:get().deno_path
+  local node_path = cfg:get().node_path
 
   local job = Job:new(
     {
-      command = deno_path,
+      command = node_path,
       args = {
-        'run',
-        '--no-config',
-        '--quiet',
-        '--cached-only',
-        '--no-check',
-        '--allow-env',
-        -- Tailwind reads and walks a bunch of files to retrieve your config.
-        '--allow-read',
-        -- Tailwind uses the uid (username) to retrieve configuration.
-        '--allow-sys=uid',
-        plugin_path .. '/formatter/src/index.ts',
+        plugin_path .. '/formatter/dist/index.js',
         vim.json.encode(texts),
       },
     }
   )
 
   local result = job:sync()
+
   local error = job:stderr_result()
 
   if #error > 0 then
@@ -154,32 +133,6 @@ M.toggle_on_save = function(extra_cfg)
 
     M.on_save_enabled = true
   end
-end
-
-M._deno_cache = function()
-  if not M.config:get().deno_cache then
-    return
-  end
-
-  local plugin_path = util.plugin_path()
-  local deno_path = M.config:get().deno_path
-
-  M.cache_job = Job:new(
-    {
-      command = deno_path,
-      args = {
-        'cache',
-        '--no-config',
-        '--quiet',
-        plugin_path .. '/formatter/src/index.ts',
-      },
-      on_exit = function()
-        M.cache_job = nil
-      end,
-    }
-  )
-
-  M.cache_job:start()
 end
 
 return M

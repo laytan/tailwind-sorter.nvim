@@ -6,7 +6,7 @@ describe(
     it(
       'sorts .html on save with default config', function()
         local tailwind_sorter = require('tailwind-sorter')
-        tailwind_sorter.setup({ deno_cache = false })
+        tailwind_sorter.setup()
 
         local file = './tests/fixtures/on_save/on_save_test.html'
         common.open(file)
@@ -24,7 +24,7 @@ describe(
     it(
       'does not sort after toggling back off', function()
         local tailwind_sorter = require('tailwind-sorter')
-        tailwind_sorter.setup({ deno_cache = false })
+        tailwind_sorter.setup()
 
         local file = './tests/fixtures/on_save/on_save_test.html'
         common.open(file)
@@ -41,7 +41,7 @@ describe(
     it(
       'sorts on save with overwritten pattern', function()
         local tailwind_sorter = require('tailwind-sorter')
-        tailwind_sorter.setup({ deno_cache = false })
+        tailwind_sorter.setup()
 
         vim.api.nvim_create_autocmd(
           { 'BufEnter', 'BufWinEnter' },
@@ -66,7 +66,7 @@ describe(
     it(
       'can enable sort on save by default', function()
         local tailwind_sorter = require('tailwind-sorter')
-        tailwind_sorter.setup({ on_save_enabled = true, deno_cache = false })
+        tailwind_sorter.setup({ on_save_enabled = true })
 
         local file = './tests/fixtures/on_save/on_save_test.html'
         common.open(file)

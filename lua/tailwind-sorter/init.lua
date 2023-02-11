@@ -60,15 +60,7 @@ M.sort = function(buf, extra_cfg)
   end
 
   local plugin_path = util.plugin_path()
-  local deno_path = cfg:get_deno_path()
-  if not deno_path then
-    vim.notify(
-      '[tailwind-sorter.nvim]: `deno` is required to be installed and pointed to through the `deno_path` config key, please do this and try again.'
-      ,
-      vim.log.levels.ERROR
-    )
-    return
-  end
+  local deno_path = cfg:get().deno_path
 
   local job = Job:new(
     {
@@ -156,14 +148,7 @@ M.deno_cache = function(extra_cfg, on_exit)
   on_exit = on_exit or function() end
 
   local plugin_path = util.plugin_path()
-  local deno_path = cfg:get_deno_path()
-  if not deno_path then
-    vim.notify(
-      '[tailwind-sorter.nvim]: `deno` is required to be installed and pointed to through the `deno_path` config key, please do this and try again.',
-      vim.log.levels.ERROR
-    )
-    return
-  end
+  local deno_path = cfg:get().deno_path
 
   Job:new(
     {

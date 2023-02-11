@@ -42,19 +42,4 @@ function M:with(config)
   return copy
 end
 
---- @return string|nil
-function M:get_deno_path()
-  local p = self:get().deno_path
-  if p ~= 'deno' then
-    return vim.loop.fs_realpath(p)
-  end
-
-  local out = Job:new({
-    command = 'which',
-    args = { 'deno' },
-  }):sync()
-
-  return out[1] or nil
-end
-
 return M

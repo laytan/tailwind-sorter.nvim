@@ -27,6 +27,9 @@ jobs:
           curl -fsSL https://deno.land/x/install/install.sh | sh
           sudo ln -s /home/runner/.deno/bin/deno /usr/local/bin
 
+      - name: Cache Deno formatter dependencies
+        run: deno cache formatter/src/index.ts
+
       - name: Install and prepare Neovim
         run: |
           wget https://github.com/neovim/neovim/releases/download/nightly/nvim-linux64.tar.gz

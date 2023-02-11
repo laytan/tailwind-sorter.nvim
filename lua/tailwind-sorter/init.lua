@@ -14,6 +14,8 @@ M.on_save_enabled = false
 M.setup = function(cfg)
   M.config:apply(cfg)
 
+  M.deno_cache()
+
   M.augroup = vim.api.nvim_create_augroup('tailwind-sorter', {})
 
   vim.api.nvim_create_user_command(
@@ -140,6 +142,40 @@ M.toggle_on_save = function(extra_cfg)
 
     M.on_save_enabled = true
   end
+end
+
+--- @param extra_cfg nil|TWPartialConfig
+--- @param on_exit nil|function
+M.deno_cache = function(extra_cfg, on_exit)
+  local cfg = M.config
+  if extra_cfg then
+    cfg = cfg:with(extra_cfg)
+  end
+
+  on_exit = on_exit or function() end
+
+  local plugin_path = util.plugin_path()
+  local deno_path = cfg:get_deno_path()
+  if not deno_path then
+    vim.notify(
+      '[tailwind-sorter.nvim]: `deno` is required to be installed and pointed to through the `deno_path` config key, please do this and try again.',
+      vim.log.levels.ERROR
+    )
+    return
+  end
+
+  Job:new(
+    {
+      command = deno_path,
+      args = {
+        'cache',
+        '--no-config',
+        '--quiet',
+        plugin_path .. '/formatter/src/index.ts',
+      },
+      on_exit = on_exit,
+    }
+  ):start()
 end
 
 return M

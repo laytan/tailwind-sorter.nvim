@@ -1,21 +1,18 @@
 local util = require('tailwind-sorter.util')
-local Job = require('plenary.job')
 
 --- @class TWConfig
 local M = {
   config = {
     on_save_enabled = false,
     on_save_pattern = { '*.html', '*.js', '*.jsx', '*.tsx', '*.twig', '*.hbs', '*.php' },
-    deno_path = 'deno',
-    deno_cache = true,
+    node_path = 'node',
   },
 }
 
 --- @class TWPartialConfig
 --- @field on_save_enabled nil|boolean
 --- @field on_save_pattern nil|string[]
---- @field deno_path nil|string
---- @field deno_cache nil|boolean
+--- @field node_path nil|string
 --- @endclass
 
 function M:get()

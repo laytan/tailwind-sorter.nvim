@@ -1,12 +1,10 @@
 check:
 	lua-format ./**/*.lua --check && \
 	selene ./**/*.lua && \
-	deno fmt --check && \
-	deno check formatter/src/index.ts
+	cd formatter && npm run check
 
 fmt:
-	lua-format ./**/*.lua -i && \
-	deno fmt
+	lua-format ./**/*.lua -i
 
 test:
 	./scripts/run_tests.sh

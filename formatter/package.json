@@ -1,0 +1,19 @@
+{
+  "name": "tailwind-sorter",
+  "version": "1.0.0",
+  "author": "Laytan Laats",
+  "license": "MIT",
+  "source": "src/index.ts",
+  "main": "dist/index.js",
+  "scripts": {
+    "watch": "parcel watch",
+    "build": "parcel build",
+    "check": "tsc src/index.ts --target es2020 --noEmit"
+  },
+  "dependencies": {
+    "tailwindcss": "^3.2.6"
+  },
+  "devDependencies": {
+    "@types/node": "^18.13.0"
+  }
+}

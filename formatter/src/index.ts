@@ -1,18 +1,12 @@
-import setupContextUtils from "npm:tailwindcss/lib/lib/setupContextUtils.js";
-import resolveConfig from "npm:tailwindcss/resolveConfig.js";
-import resolveConfigPathUtil from "npm:tailwindcss/lib/util/resolveConfigPath.js";
-import { createRequire } from "https://deno.land/std/node/module.ts";
-
-const { createContext } = setupContextUtils;
-const { default: resolveConfigPath } = resolveConfigPathUtil;
+const { createContext } = require("tailwindcss/lib/lib/setupContextUtils.js");
+const resolveConfig = require("tailwindcss/resolveConfig.js");
+const { default: resolveConfigPath } = require("tailwindcss/lib/util/resolveConfigPath.js");
 
 const configPath = resolveConfigPath();
-
-const require = createRequire(import.meta.url);
-const config = configPath ? await require(configPath) : {};
+const config = configPath ? require(configPath) : {};
 const ctx = createContext(resolveConfig(config));
 
-const texts = JSON.parse(Deno.args[0]);
+const texts = JSON.parse(process.argv[2]);
 const replacements = texts.map(sortClasses);
 console.log(JSON.stringify(replacements));
 

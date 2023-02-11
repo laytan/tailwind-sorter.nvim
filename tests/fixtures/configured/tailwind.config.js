@@ -2,8 +2,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        gold: '#BEA042'
-      }
-    }
-  }
-}
+        gold: "#BEA042",
+      },
+    },
+  },
+};

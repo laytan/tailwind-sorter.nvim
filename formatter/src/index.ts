@@ -9,9 +9,7 @@ const { default: resolveConfigPath } = resolveConfigPathUtil;
 const configPath = resolveConfigPath();
 
 const require = createRequire(import.meta.url);
-const config = configPath
-  ? await require(configPath)
-  : {};
+const config = configPath ? await require(configPath) : {};
 const ctx = createContext(resolveConfig(config));
 
 const texts = JSON.parse(Deno.args[0]);

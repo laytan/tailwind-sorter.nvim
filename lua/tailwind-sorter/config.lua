@@ -7,6 +7,7 @@ local M = {
     on_save_enabled = false,
     on_save_pattern = { '*.html', '*.js', '*.jsx', '*.tsx', '*.twig', '*.hbs', '*.php' },
     deno_path = 'deno',
+    deno_cache = true,
   },
 }
 
@@ -14,6 +15,7 @@ local M = {
 --- @field on_save_enabled nil|boolean
 --- @field on_save_pattern nil|string[]
 --- @field deno_path nil|string
+--- @field deno_cache nil|boolean
 --- @endclass
 
 function M:get()

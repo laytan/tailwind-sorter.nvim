@@ -9,12 +9,14 @@ local M = {}
 M.augroup = nil
 M.config = config:with()
 M.on_save_enabled = false
+--- @type nil|Job
+M.cache_job = nil
 
 --- @param cfg TWPartialConfig
 M.setup = function(cfg)
   M.config:apply(cfg)
 
-  M.deno_cache()
+  M._deno_cache()
 
   M.augroup = vim.api.nvim_create_augroup('tailwind-sorter', {})
 
@@ -43,6 +45,14 @@ M.sort = function(buf, extra_cfg)
   local cfg = M.config
   if extra_cfg then
     cfg = cfg:with(extra_cfg)
+  end
+
+  if M.cache_job then
+    vim.notify('[tailwind-sorter.nvim]: Initial setup is still being done, you will be notified once the plugin is ready.')
+    M.cache_job:add_on_exit_callback(function()
+      vim.notify('[tailwind-sorter.nvim]: Initial setup finished, you are now ready to sort classes.')
+    end)
+    return
   end
 
   buf = buf or vim.api.nvim_get_current_buf()
@@ -137,20 +147,15 @@ M.toggle_on_save = function(extra_cfg)
   end
 end
 
---- @param extra_cfg nil|TWPartialConfig
---- @param on_exit nil|function
-M.deno_cache = function(extra_cfg, on_exit)
-  local cfg = M.config
-  if extra_cfg then
-    cfg = cfg:with(extra_cfg)
+M._deno_cache = function()
+  if not M.config:get().deno_cache then
+    return
   end
 
-  on_exit = on_exit or function() end
-
   local plugin_path = util.plugin_path()
-  local deno_path = cfg:get().deno_path
+  local deno_path = M.config:get().deno_path
 
-  Job:new(
+  M.cache_job = Job:new(
     {
       command = deno_path,
       args = {
@@ -159,9 +164,13 @@ M.deno_cache = function(extra_cfg, on_exit)
         '--quiet',
         plugin_path .. '/formatter/src/index.ts',
       },
-      on_exit = on_exit,
+      on_exit = function()
+        M.cache_job = nil
+      end,
     }
-  ):start()
+  )
+
+  M.cache_job:start()
 end
 
 return M

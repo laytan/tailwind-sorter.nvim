@@ -23,7 +23,7 @@ describe(
         local file = './tests/fixtures/configured/test.html'
         common.open(file)
 
-        require('tailwind-sorter').setup().sort()
+        require('tailwind-sorter').setup({ deno_cache = false }).sort()
         common.check_sort(file)
 
         vim.cmd('!rm ./tailwind.config.js')

@@ -1,5 +1,5 @@
 local common = require('tests.common')
-local tailwind_sorter = require('tailwind-sorter').setup()
+local tailwind_sorter = require('tailwind-sorter').setup({ deno_cache = false })
 local util = require('tailwind-sorter.util')
 
 describe(

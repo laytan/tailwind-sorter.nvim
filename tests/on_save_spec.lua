@@ -8,7 +8,7 @@ describe(
         local tailwind_sorter = require('tailwind-sorter')
         tailwind_sorter.setup()
 
-        local file = './tests/fixtures/on_save_test.html'
+        local file = './tests/fixtures/on_save/on_save_test.html'
         common.open(file)
 
         vim.cmd('TailwindSortOnSaveToggle')
@@ -26,7 +26,7 @@ describe(
         local tailwind_sorter = require('tailwind-sorter')
         tailwind_sorter.setup()
 
-        local file = './tests/fixtures/on_save_test.html'
+        local file = './tests/fixtures/on_save/on_save_test.html'
         common.open(file)
 
         vim.cmd('TailwindSortOnSaveToggle')
@@ -48,7 +48,7 @@ describe(
           { pattern = '*.test', command = 'setfiletype html' }
         )
 
-        local file = './tests/fixtures/on_save_test.test'
+        local file = './tests/fixtures/on_save/on_save_test.test'
         common.open(file)
 
         tailwind_sorter.toggle_on_save(
@@ -68,7 +68,7 @@ describe(
         local tailwind_sorter = require('tailwind-sorter')
         tailwind_sorter.setup({ on_save_enabled = true })
 
-        local file = './tests/fixtures/on_save_test.html'
+        local file = './tests/fixtures/on_save/on_save_test.html'
         common.open(file)
 
         vim.cmd('doautocmd BufWritePre on_save_test.html')

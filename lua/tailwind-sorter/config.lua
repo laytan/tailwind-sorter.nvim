@@ -5,7 +5,7 @@ local Job = require('plenary.job')
 local M = {
   config = {
     on_save_enabled = false,
-    on_save_pattern = { '*.html', '*.js', '*.jsx', '*.tsx', '*.twig', '*.hbs' },
+    on_save_pattern = { '*.html', '*.js', '*.jsx', '*.tsx', '*.twig', '*.hbs', '*.php' },
     deno_path = 'deno',
   },
 }

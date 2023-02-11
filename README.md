@@ -3,9 +3,8 @@
 Sorts your tailwind classes, just like
 [prettier-plugin-tailwindcss](https://github.com/tailwindlabs/prettier-plugin-tailwindcss).
 
-The plugin currently works in the treesitter parsers `html_tags` and `jsx`, and
-is very easy to extend (see below). This means it should work in any language
-that extends/injects html or jsx.
+The plugin integrates with Treesitter to find classes. This means it can work in
+any language and is easy to extend to new file types.
 
 ## Features
 
@@ -16,8 +15,10 @@ that extends/injects html or jsx.
   - html
   - twig
   - handlebars
+  - any languages that inject any of the above languages
 - Not having to pull in prettier just to have your classes sorted
-- Easier/faster than prettier
+- Easier/faster than prettier if all you want is tailwind sorting
+- Easy to extend to other languages or use-cases
 
 ## Usage
 
@@ -33,7 +34,7 @@ The following is the **default** configuration:
 ```lua
 require('tailwind-sorter').setup({
   on_save_enabled = false, -- If `true`, automatically enables on save sorting.
-  on_save_pattern = { '*.html', '*.js', '*.jsx', '*.tsx', '*.twig', '*.hbs' }, -- The file patterns to watch and sort.
+  on_save_pattern = { '*.html', '*.js', '*.jsx', '*.tsx', '*.twig', '*.hbs', '*.php' }, -- The file patterns to watch and sort.
 })
 ```
 

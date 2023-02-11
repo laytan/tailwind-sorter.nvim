@@ -114,6 +114,7 @@ M.sort = function(buf, extra_cfg)
   end
 end
 
+--- @param extra_cfg nil|TWPartialConfig
 M.toggle_on_save = function(extra_cfg)
   local cfg = M.config
   if extra_cfg then

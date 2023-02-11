@@ -2,6 +2,7 @@ local Job = require('plenary.job')
 local config = require('tailwind-sorter.config')
 local util = require('tailwind-sorter.util')
 local tsutil = require('tailwind-sorter.tsutil')
+local sorted_cache = require('tailwind-sorter.cache')
 
 local M = {}
 
@@ -59,10 +60,15 @@ M.sort = function(buf, extra_cfg)
 
   local matches = tsutil.get_query_matches(buf)
 
+  local used_matches = {}
   local texts = {}
   for _, match in ipairs(matches) do
     local text = tsutil.get_match_text(match)
-    table.insert(texts, text)
+
+    if not sorted_cache.has(text) then
+      table.insert(used_matches, match)
+      table.insert(texts, text)
+    end
   end
 
   if #texts == 0 then
@@ -79,6 +85,8 @@ M.sort = function(buf, extra_cfg)
         'run',
         '--no-config',
         '--quiet',
+        '--cached-only',
+        '--no-check',
         '--allow-env',
         -- Tailwind reads and walks a bunch of files to retrieve your config.
         '--allow-read',
@@ -112,7 +120,8 @@ M.sort = function(buf, extra_cfg)
 
   -- Iterate the replacements in reverse and set them in the buffer.
   for i = #out, 1, -1 do
-    tsutil.put_new_node_text(matches[i], out[i])
+    sorted_cache.put(out[i])
+    tsutil.put_new_node_text(used_matches[i], out[i])
   end
 end
 

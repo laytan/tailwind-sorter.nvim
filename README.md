@@ -27,6 +27,13 @@ any language and is easy to extend to new file types.
 - `:TailwindSort` sorts classes in the current buffer
 - `:TailwindSortOnSaveToggle` toggles automatic sorting on save
 
+### Requirements
+
+- [deno](https://deno.land/manual@v1.30.2/getting_started/installation) (The
+  deno requirement is temporary and will be dropped, see #1)
+- [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
+- [plenary](https://github.com/nvim-lua/plenary.nvim)
+
 ### Configuration
 
 The following is the **default** configuration:
@@ -35,6 +42,7 @@ The following is the **default** configuration:
 require('tailwind-sorter').setup({
   on_save_enabled = false, -- If `true`, automatically enables on save sorting.
   on_save_pattern = { '*.html', '*.js', '*.jsx', '*.tsx', '*.twig', '*.hbs', '*.php' }, -- The file patterns to watch and sort.
+  deno_path = 'deno',
 })
 ```
 
@@ -77,13 +85,6 @@ lua <<EOF
   require('tailwind-sorter').setup()
 EOF
 ```
-
-### Requirements
-
-- [deno](https://deno.land/manual@v1.30.2/getting_started/installation) (The
-  deno requirement is temporary and will be dropped soon)
-- [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
-- [plenary](https://github.com/nvim-lua/plenary.nvim)
 
 ### Extending
 

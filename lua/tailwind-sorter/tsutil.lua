@@ -77,22 +77,26 @@ M.get_query_matches = function(buf)
         end
 
         for pattern, match, _ in query:iter_matches(tree:root(), buf, 0, -1) do
-          for id, node in pairs(match) do
-            if query.captures[id] == 'tailwind' then
-              local res = { node = node, buf = buf }
+          if match then
+            for id, node in pairs(match) do
+              if query.captures[id] == 'tailwind' then
+                local res = { node = node, buf = buf }
 
-              for _, pred in pairs(query.info.patterns[pattern]) do
-                if pred[2] == id and pred[1] == 'offset!' then
-                  res.offset = {
-                    start_row = tonumber(pred[3]),
-                    start_col = tonumber(pred[4]),
-                    end_row = tonumber(pred[5]),
-                    end_col = tonumber(pred[6]),
-                  }
+                if query.info.patterns[pattern] then
+                  for _, pred in pairs(query.info.patterns[pattern]) do
+                    if pred[2] == id and pred[1] == 'offset!' then
+                      res.offset = {
+                        start_row = tonumber(pred[3]),
+                        start_col = tonumber(pred[4]),
+                        end_row = tonumber(pred[5]),
+                        end_col = tonumber(pred[6]),
+                      }
+                    end
+                  end
                 end
-              end
 
-              table.insert(matches, res)
+                table.insert(matches, res)
+              end
             end
           end
         end

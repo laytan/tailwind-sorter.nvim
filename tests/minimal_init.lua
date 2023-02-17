@@ -9,7 +9,7 @@ vim.o.swapfile = false
 
 require('nvim-treesitter.configs').setup(
   {
-    ensure_installed = { 'html', 'javascript', 'twig', 'tsx', 'glimmer' },
+    ensure_installed = { 'html', 'javascript', 'twig', 'tsx', 'glimmer', 'heex', 'elixir' },
 
     -- Install parsers synchronously (only applied to `ensure_installed`)
     sync_install = true,

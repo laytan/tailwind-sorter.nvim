@@ -71,7 +71,7 @@ M.get_query_matches = function(buf)
       function(tree, lang_tree)
         local lang = lang_tree:lang()
 
-        local query = vim.treesitter.query.get(lang, 'tailwind')
+        local query = M.get_query(lang, 'tailwind')
         if not query then
           return
         end
@@ -105,6 +105,18 @@ M.get_query_matches = function(buf)
   end
 
   return matches
+end
+
+--- @param lang string
+--- @param query string
+M.get_query = function (lang, query)
+  -- vim.treesitter.query.get for nightly.
+  if vim.treesitter.query.get ~= nil then
+    return vim.treesitter.query.get(lang, query)
+  else
+  -- vim.treesitter.get_query for stable.
+    return vim.treesitter.query.get_query(lang, query)
+  end
 end
 
 return M

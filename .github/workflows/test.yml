@@ -18,6 +18,11 @@ concurrency:
 jobs:
   test:
     name: Test
+
+    strategy:
+      matrix:
+        version: [nightly, stable]
+
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -34,7 +39,7 @@ jobs:
 
       - name: Install and prepare Neovim
         run: |
-          wget https://github.com/neovim/neovim/releases/download/nightly/nvim-linux64.tar.gz
+          wget https://github.com/neovim/neovim/releases/download/${{ matrix.version }}/nvim-linux64.tar.gz
           tar -zxf nvim-linux64.tar.gz
           sudo ln -s $(pwd)/nvim-linux64/bin/nvim /usr/local/bin
 

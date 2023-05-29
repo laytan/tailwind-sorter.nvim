@@ -15,6 +15,6 @@
   },
   "devDependencies": {
     "@types/node": "^18.16.2",
-    "parcel": "^2.8.3"
+    "parcel": "^2.9.1"
   }
 }

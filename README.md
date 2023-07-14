@@ -32,7 +32,7 @@ any language and is easy to extend to new file types.
 
 ### Requirements
 
-- NodeJS, tested with v16
+- NodeJS, tested with v16, v18 and v20
 - [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
 - [plenary](https://github.com/nvim-lua/plenary.nvim)
 

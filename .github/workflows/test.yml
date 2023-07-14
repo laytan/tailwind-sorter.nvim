@@ -24,6 +24,7 @@ jobs:
     strategy:
       matrix:
         version: [nightly, stable]
+        node: [16, 18.16, 20.4]
 
     runs-on: ubuntu-latest
     steps:
@@ -31,7 +32,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: ${{ matrix.node }}
 
       - name: Install NPM dependencies
         run: cd formatter && npm i

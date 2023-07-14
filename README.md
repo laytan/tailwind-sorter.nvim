@@ -16,6 +16,8 @@ any language and is easy to extend to new file types.
   - twig
   - handlebars
   - elixir/heex
+  - astro
+  - haskell
   - any languages that inject any of the above languages
 - Not having to pull in prettier just to have your classes sorted
 - Easier/faster than prettier if all you want is tailwind sorting
@@ -41,7 +43,7 @@ The following is the **default** configuration:
 ```lua
 require('tailwind-sorter').setup({
   on_save_enabled = false, -- If `true`, automatically enables on save sorting.
-  on_save_pattern = { '*.html', '*.js', '*.jsx', '*.tsx', '*.twig', '*.hbs', '*.php', '*.heex' }, -- The file patterns to watch and sort.
+  on_save_pattern = { '*.html', '*.js', '*.jsx', '*.tsx', '*.twig', '*.hbs', '*.php', '*.heex', '*.astro' }, -- The file patterns to watch and sort.
   node_path = 'node',
 })
 ```

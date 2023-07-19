@@ -1,9 +1,10 @@
 const { createContext } = require("tailwindcss/lib/lib/setupContextUtils.js");
 const resolveConfig = require("tailwindcss/resolveConfig.js");
 const { default: resolveConfigPath } = require("tailwindcss/lib/util/resolveConfigPath.js");
+const loadConfig = require("tailwindcss/loadConfig.js");
 
 const configPath = resolveConfigPath();
-const config = configPath ? require(configPath) : {};
+const config = configPath ? loadConfig(configPath) : {};
 const ctx = createContext(resolveConfig(config));
 
 const texts = JSON.parse(process.argv[2]);

@@ -17,6 +17,7 @@ require('nvim-treesitter.configs').setup(
       'glimmer',
       'heex',
       'elixir',
+      'php',
     },
 
     -- Install parsers synchronously (only applied to `ensure_installed`)

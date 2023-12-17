@@ -4,7 +4,7 @@ local util = require('tailwind-sorter.util')
 local M = {
   config = {
     on_save_enabled = false,
-    on_save_pattern = { '*.html', '*.js', '*.jsx', '*.tsx', '*.twig', '*.hbs', '*.php', '*.heex', '*.astro' },
+    on_save_pattern = { '*.html', '*.js', '*.jsx', '*.tsx', '*.twig', '*.hbs', '*.php', '*.heex', '*.astro', '*.templ' },
     node_path = 'node',
   },
 }

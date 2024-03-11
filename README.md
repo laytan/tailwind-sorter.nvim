@@ -55,7 +55,7 @@ require('lazy').setup({
   {
     'laytan/tailwind-sorter.nvim',
     dependencies = {'nvim-treesitter/nvim-treesitter', 'nvim-lua/plenary.nvim'},
-    build = 'cd formatter && npm i && npm run build',
+    build = 'cd formatter && npm ci && npm run build',
     config = true,
   },
 })
@@ -69,7 +69,7 @@ require('packer').startup(function(use)
     'laytan/tailwind-sorter.nvim',
     requires = {'nvim-treesitter/nvim-treesitter', 'nvim-lua/plenary.nvim'},
     config = function() require('tailwind-sorter').setup() end,
-    run = 'cd formatter && npm i && npm run build',
+    run = 'cd formatter && npm ci && npm run build',
   }
 end)
 ```
@@ -81,7 +81,7 @@ call plug#begin()
 
 Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'nvim-lua/plenary.nvim'
-Plug 'laytan/tailwind-sorter.nvim', { 'do': 'cd formatter && npm i && npm run build' }
+Plug 'laytan/tailwind-sorter.nvim', { 'do': 'cd formatter && npm ci && npm run build' }
 
 call plug#end()
 

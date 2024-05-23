@@ -1,1 +1,1 @@
-(string_value) @tailwind
+(string_content) @tailwind

@@ -97,6 +97,13 @@ M.sort = function(buf, extra_cfg)
 
   local out = vim.json.decode(result[1])
 
+  -- Optionally trim extra spaces
+  if cfg:get().trim_spaces then
+    for i, class_string in ipairs(out) do
+      out[i] = class_string:gsub("^%s*(.-)%s*$", "%1"):gsub("%s+", " ")
+    end
+  end
+
   -- Iterate the replacements in reverse and set them in the buffer.
   for i = #out, 1, -1 do
     sorted_cache.put(out[i])

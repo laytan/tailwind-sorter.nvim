@@ -6,6 +6,7 @@ local M = {
     on_save_enabled = false,
     on_save_pattern = { '*.html', '*.js', '*.jsx', '*.tsx', '*.twig', '*.hbs', '*.php', '*.heex', '*.astro', '*.css', '*.templ' },
     node_path = 'node',
+    trim_spaces = false,
   },
 }
 
